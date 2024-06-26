@@ -1,4 +1,3 @@
-// lib/helpers/database_helper.dart
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:todoapp/feature/model/todo_model.dart';
@@ -7,11 +6,11 @@ class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   static Database? _database;
 
+  DatabaseHelper._internal();
+
   factory DatabaseHelper() {
     return _instance;
   }
-
-  DatabaseHelper._internal();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -30,7 +29,7 @@ class DatabaseHelper {
     );
   }
 
-  Future _createDb(Database db, int version) async {
+  Future<void> _createDb(Database db, int version) async {
     await db.execute('''
       CREATE TABLE todos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,11 +39,9 @@ class DatabaseHelper {
     ''');
   }
 
-  // CRUD operations
-
   Future<void> insertTodo(Todo todo) async {
     final db = await database;
-     await db.insert('todos', todo.toMap());
+    await db.insert('todos', todo.toMap());
   }
 
   Future<List<Todo>> getTodos() async {
@@ -58,7 +55,7 @@ class DatabaseHelper {
 
   Future<void> updateTodo(Todo todo) async {
     final db = await database;
-     await db.update(
+    await db.update(
       'todos',
       todo.toMap(),
       where: 'id = ?',
@@ -68,7 +65,7 @@ class DatabaseHelper {
 
   Future<void> deleteTodo(int id) async {
     final db = await database;
-     await db.delete(
+    await db.delete(
       'todos',
       where: 'id = ?',
       whereArgs: [id],
